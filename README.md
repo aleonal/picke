@@ -1,7 +1,7 @@
 # Picke
 Mobile-first web application designed for incoming or current UTEP students looking to streamline their career.
 
-Requirements
+**Requirements**
 - Student personal information
 	- Full Name
 	- UTEP ID
@@ -18,7 +18,7 @@ Requirements
 	- Handle desired graduation date
 	- Provide option to add summer and/or winter semesters
 
-Testing
+**Testing**
 - Majors
 	- BS in Electrical Engineering
 	- BBA with any of its concentrations
@@ -31,7 +31,7 @@ Testing
 	- Physics
 	- Mathematics
 	
-MySQL Database
+**MySQL Database**
 - Database will be hosted on localhost for the duration of the hackathon
 - Database will only hold user information
 	- If registered user, database will hold information indefinitely.
