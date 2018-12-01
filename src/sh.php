@@ -30,7 +30,7 @@ class Server {
   public static function updateInfo($email, $place, $data) {
     if(testConnection()) {
       $key = hash('sha256', $email);
-      $req = "UPDATE user_info SET ".$place."=".$data." WHERE id=".$key.;
+      $req = "UPDATE user_info SET ".$place."=".$data." WHERE uid=".$key.;
       if($this -> c -> query($req) === TRUE) {
         echo "Record updated successfully.";
         return TRUE;
@@ -72,15 +72,20 @@ class Server {
     $this -> c -> close();
   }
 
-  //returns server instance with open connection
+  //opens connection
   public static function serverConnect() {
-    $instance = new self();
-
     $this -> c = new mysqli($servername, $username, $password, $dbname);
-    if($this -> c -> connect_error)
-      die("Connection failed: " . $this -> c -> connect_error);
+    if($this -> c -> connect_error) {
+      echo "Connection failed: ".$this -> c -> connect_error);
+      return FALSE;
+    } echo "Connected successfully";
 
-    echo "Connected successfully";
+    return TRUE;
+  }
+
+  //returns server instance
+  public static function create() {
+    $instance = new self();
     return $instance;
   }
 }
