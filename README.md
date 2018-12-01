@@ -30,3 +30,9 @@ Testing
 - Minors
 	- Physics
 	- Mathematics
+	
+MySQL Database
+- Database will be hosted on localhost for the duration of the hackathon
+- Database will only hold user information
+	- If registered user, database will hold information indefinitely.
+	- If guest, information will be held for the duration of the session
