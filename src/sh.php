@@ -1,19 +1,41 @@
 <?php
+
+    $server = Server::create();
+    $server -> serverConnect();
+    $server -> createUser('jose', 'miner', "jajaj@utep.edu", '80510', 'EE', 'e', 'e', 'e', 'abc123');
+    $info = $server -> getSessionInfo('abc123');
+    $server -> serverDisconnect();
+
 class Server {
   var $servername = "localhost";
-  var $dbname = "picke";
-  var $username = "user";
-  var $password - "pass123";
+  var $username = "root";
+  var $databasename = "mysql";
+  var $password = "An1bZ1!@4%$?";
+  var $c;
 
   public function __construct() {
   }
 
+  //returns server instance
+  public static function create() {
+      $instance = new self();
+      return $instance;
+  }
+
+  //tests connection
+  private function testConnection() {
+      if($this -> c == null) return FALSE;
+      if($this -> c -> connect_error) {
+          return FALSE;
+      } return TRUE;
+  }
+
   //create user upon signup
-  public static function createUser($first, $last, $email, $UTEPID, $fmajor, $smajor, $minor, $concentration, $p) {
-    if(testConnection()) {
-      $key = cH($p);
-      $req = "INSERT INTO user_info (uid, first, last, email, utepid, first major, second major, minor, concentration)
-      VALUES (".$key.", ".$first.", ".$last.", ".$email.", ".$UTEPID.", ".$fmajor.", ".$smajor.", ".$minor.", ".$concentration.")";
+  public function createUser($first, $last, $email, $UTEPID, $fmajor, $smajor, $minor, $concentration, $p) {
+    if($this -> testConnection()) {
+      $key = hash('sha256', $p);
+      $req = 'INSERT INTO `user_info` (uid, firstname, lastname, email, utepid, fmajor, smajor, minor, concentration)
+              VALUES ("'.$key.'", "'.$first.'", "'.$last.'", "'.$email.'", "'.$UTEPID.'", "'.$fmajor.'", "'.$smajor.'", "'.$minor.'", "'.$concentration.'" )';
 
       if($this -> c -> query($req) === TRUE) {
         echo "User created successfully.";
@@ -26,10 +48,10 @@ class Server {
     return FALSE;
   }
 
-  //recieves username and information to place in database
-  public static function updateInfo($uid, $place, $data) {
-    if(testConnection()) {
-      $req = "UPDATE user_info SET ".$place."=".$data." WHERE uid=".$uid.;
+  //receives username and information to place in database
+  public function updateInfo($uid, $place, $data) {
+    if($this -> testConnection()) {
+      $req = "UPDATE user_info WHERE 'uid'={$uid} SET {$place}={$data}";
       if($this -> c -> query($req) === TRUE) {
         echo "Record updated successfully.";
         return TRUE;
@@ -42,14 +64,14 @@ class Server {
   }
 
   //returns complete user data from database
-  public static function getSessionInfo($p) {
-    if(testConnection()) {
-      $req = "SELECT * FROM user_info"
-      $rs = $this -> c -> query($erq);
+  public function getSessionInfo($p) {
+    if($this -> testConnection()) {
+      $req = "SELECT * FROM user_info";
+      $rs = $this -> c -> query($req);
 
       //looks for user record
       $row = mysqli_fetch_array($rs);
-      $key = cH($p);
+      $key = hash('sha256', $p);
       while($row['uid'] != $key) {
         $row = mysqli_fetch_array($rs);
       }
@@ -60,37 +82,19 @@ class Server {
   }
 
   //closes connection
-  public static function serverDisconnect() {
+  public function serverDisconnect() {
     $this -> c -> close();
   }
 
   //opens connection
-  public static function serverConnect() {
-    $this -> c = new mysqli($servername, $username, $password, $dbname);
+  public function serverConnect() {
+      $c = new \mysqli($this -> servername, $this -> username, $this -> password, $this -> databasename);
+      $this -> c = $c;
     if($this -> c -> connect_error) {
-      echo "Connection failed: ".$this -> c -> connect_error);
+      echo "Connection failed: {$this -> c -> connect_error}";
       return FALSE;
-    } echo "Connected successfully";
+    } echo "Connected successfully \n";
 
     return TRUE;
   }
-
-  //returns server instance
-  public static function create() {
-    $instance = new self();
-    return $instance;
-  }
-
-  //tests connection
-  private static function testConnection() {
-    if($this -> c -> conncet_error) {
-      return FALSE;
-    } return TRUE;
-  }
-
-  //hashes password
-  private static function cH($p) {
-    return hash('sha256', $p);
-  }
 }
- ?>

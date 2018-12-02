@@ -1,15 +1,34 @@
-<?php
-$Fname = $_POST["Fname"];
-$Lname = $_POST["Lname"];
-?>
-<html>
-<head>
-<title>Personal INFO</title>
-</head>
-<body>
-<form method="post" action="<?php echo $PHP_SELF;?>">
-First Name:<input type="text" size="12" maxlength="12" name="Fname"><br />
-Last Name:<input type="text" size="12" maxlength="36" name="Lname"><br /></form>
-<?
-echo "Hello, ".$Fname." ".$Lname.".<br />";
-?>
+<!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <title>Test</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+
+      <?php
+        require_once '../sh.php';
+        $server = Server::create();
+        $server -> serverConnect();
+        $server -> createUser('jose', 'miner', 'jajaj@utep.edu', '80510', 'EE', NULL, NULL, NULL, 'abc123');
+        $info = $server -> getSessionInfo('abc123');
+        $server -> serverDisconnect();
+      ?>
+    </head>
+
+    <body>
+    </body>
+  </html>
+
+  <html>
+    <head>
+      <title>Personal INFO</title>
+    </head>
+    <body>
+      <form method="post" action="a">
+        First Name:<input type="text" size="12" maxlength="12" name="Fname"><br />
+        Last Name:<input type="text" size="12" maxlength="36" name="Lname"><br /></form>
+    </body>
+  </html>
+  <?php
+  echo "Hello, ".$Fname." ".$Lname.".<br />";
+  ?>
